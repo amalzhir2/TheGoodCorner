@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		897725D5305B5BCC005C6362 /* REFLECTION.md in Resources */ = {isa = PBXBuildFile; fileRef = 897725D4305B5BCC005C6362 /* REFLECTION.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		4061631B2F98EFCE008F3A80 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		4061630D2F98EFCC008F3A80 /* TheGoodCorner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TheGoodCorner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4061631A2F98EFCE008F3A80 /* TheGoodCornerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TheGoodCornerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		406163242F98EFCE008F3A80 /* TheGoodCornerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TheGoodCornerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		897725D4305B5BCC005C6362 /* REFLECTION.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = REFLECTION.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -88,6 +93,7 @@
 		406163042F98EFCC008F3A80 = {
 			isa = PBXGroup;
 			children = (
+				897725D4305B5BCC005C6362 /* REFLECTION.md */,
 				4061630F2F98EFCC008F3A80 /* TheGoodCorner */,
 				4061631D2F98EFCE008F3A80 /* TheGoodCornerTests */,
 				406163272F98EFCE008F3A80 /* TheGoodCornerUITests */,
@@ -225,6 +231,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				897725D5305B5BCC005C6362 /* REFLECTION.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
