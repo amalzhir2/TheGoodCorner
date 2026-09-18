@@ -43,6 +43,10 @@ final class ListingsViewModel: ObservableObject {
             state = .failed((error as? LocalizedError)?.errorDescription ?? "Something went wrong.")
         }
     }
+    
+    func categoryName(for id: Int) -> String {
+        categories.first(where: { $0.id == id })?.name ?? ""
+    }
 
     private func fetchListings() async {
         do {
