@@ -6,7 +6,7 @@
 //
 import  Foundation
 
-struct Listing: Decodable {
+struct Listing: Decodable, Identifiable {
     let id: Int
     let categoryId: Int
     let title: String
@@ -28,5 +28,32 @@ struct Listing: Decodable {
         case isUrgent = "is_urgent"
         case imagesUrl = "images_url"
     }
-}
+    
+    func thumbnailURL(baseURL: URL) -> URL? {
+        guard let path = imagesUrl?.thumb ?? imagesUrl?.small else { return nil }
+        return URL(string: path, relativeTo: baseURL)
+    }
+    
+    private static let priceFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencyCode = "EUR"
+        formatter.maximumFractionDigits = 2
+        return formatter
+    }()
 
+    var formattedPrice: String {
+        Self.priceFormatter.string(from: NSNumber(value: price)) ?? "\(price)"
+    }
+
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter
+    }()
+    
+    var formattedDate: String {
+        Self.dateFormatter.string(from: creationDate)
+    }
+}
