@@ -27,9 +27,16 @@ final class ListingsViewModel: ObservableObject {
     init(client: APIClientProtocol? = nil) {
         self.client = client ?? APIClient()
     }
+    
+    var filteredListingsByCategory: [Listing] {
+        guard let selectedCategoryId else { return listings }
+        return listings.filter { $0.categoryId == selectedCategoryId }
+    }
 
     func load() async {
-        state = .loading
+        if state != .loaded {
+            state = .loading
+        }
         await fetchCategories()
         await fetchListings()
     }

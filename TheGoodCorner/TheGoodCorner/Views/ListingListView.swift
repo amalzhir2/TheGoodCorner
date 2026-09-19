@@ -30,8 +30,13 @@ struct ListingListView: View {
                 ForEach(viewModel.categories) { category in
                     CategoryItem(
                         title: category.name,
-                        isSelected: viewModel.selectedCategoryId == category.id) {
-                        viewModel.selectedCategoryId = category.id
+                        isSelected: viewModel.selectedCategoryId == category.id
+                    ) {
+                        if viewModel.selectedCategoryId == category.id {
+                            viewModel.selectedCategoryId = nil
+                        } else {
+                            viewModel.selectedCategoryId = category.id
+                        }
                     }
                 }
             }
@@ -63,14 +68,13 @@ struct ListingListView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 
             case .loaded:
-                if viewModel.listings.isEmpty {
+                if viewModel.filteredListingsByCategory.isEmpty {
                     Text("Aucune annonce")
                         .font(.headline)
                         .foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
-                    List(viewModel.listings) { listing in
+                    List(viewModel.filteredListingsByCategory) { listing in
                         ListingItem(
                             listing: listing,
                             categoryName: viewModel.categoryName(for: listing.categoryId),
