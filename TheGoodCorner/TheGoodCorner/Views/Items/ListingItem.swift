@@ -34,7 +34,7 @@ struct ListingItem: View {
                         .font(.subheadline.weight(.semibold))
 
                     if listing.isUrgent {
-                        Label("Urgent", systemImage: "bolt.fill")
+                        Text("Urgent")
                             .font(.caption2.weight(.bold))
                             .foregroundStyle(.white)
                             .padding(.horizontal, 6)

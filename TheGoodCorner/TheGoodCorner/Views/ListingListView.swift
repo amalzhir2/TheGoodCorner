@@ -75,10 +75,19 @@ struct ListingListView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
                     List(viewModel.filteredListingsByCategory) { listing in
-                        ListingItem(
-                            listing: listing,
-                            categoryName: viewModel.categoryName(for: listing.categoryId),
-                            baseURL: APIClient.defaultBaseURL)
+                        NavigationLink {
+                            ListingDetailView(
+                                listing: listing,
+                                categoryName: viewModel.categoryName(for: listing.categoryId),
+                                baseURL: APIClient.defaultBaseURL
+                            )
+                        } label: {
+                            ListingItem(
+                                listing: listing,
+                                categoryName: viewModel.categoryName(for: listing.categoryId),
+                                baseURL: APIClient.defaultBaseURL
+                            )
+                        }
                     }
                     .listStyle(.plain)
                     .refreshable {
