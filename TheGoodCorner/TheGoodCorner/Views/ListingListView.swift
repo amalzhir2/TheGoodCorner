@@ -63,9 +63,11 @@ struct ListingListView: View {
                     Button("Réessayer") {
                         Task { await viewModel.load() }
                     }
+                    .accessibilityHint("Relance le chargement des annonces")
                 }
                 .padding()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .accessibilityElement(children: .combine)
                 
             case .loaded:
                 if viewModel.filteredListingsByCategory.isEmpty {

@@ -45,15 +45,12 @@ struct Listing: Decodable, Identifiable {
     var formattedPrice: String {
         Self.priceFormatter.string(from: NSNumber(value: price)) ?? "\(price)"
     }
-
-    private static let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter
-    }()
     
     var formattedDate: String {
-        Self.dateFormatter.string(from: creationDate)
+        creationDate.formattedDate
+    }
+    
+    var accessibilityFormattedDate: String {
+        creationDate.accessibilityFormattedDate
     }
 }

@@ -24,6 +24,8 @@ struct CategoryItem: View {
                 .clipShape(Capsule())
         }
         .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
+        .accessibilityHint(isSelected ? "Touchez pour désélectionner cette catégorie" : "Touchez pour filtrer par cette catégorie")
     }
 }
 

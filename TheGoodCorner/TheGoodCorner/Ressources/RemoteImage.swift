@@ -9,7 +9,6 @@ import SwiftUI
 
 struct RemoteImage: View {
     let url: URL?
-    var isDecorative: Bool = true
 
     var body: some View {
         Group {
@@ -34,6 +33,8 @@ struct RemoteImage: View {
             }
         }
         .background(Color(.secondarySystemBackground))
+        // Image décorative : masquée pour VoiceOver
+        .accessibilityHidden(true)
     }
 
     private var placeholder: some View {
