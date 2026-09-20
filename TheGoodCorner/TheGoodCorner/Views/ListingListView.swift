@@ -13,6 +13,8 @@ struct ListingListView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
+                Divider()
+                searchSection
                 categoriesSection
                 Divider()
                 listingsSection
@@ -24,6 +26,33 @@ struct ListingListView: View {
                 }
             }
         }
+    }
+        
+    private var searchSection: some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(.secondary)
+            
+            TextField("Rechercher une annonce…", text: $viewModel.searchQuery)
+                .textFieldStyle(.plain)
+                .autocorrectionDisabled()
+            
+            if !viewModel.searchQuery.isEmpty {
+                Button {
+                    viewModel.searchQuery = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Effacer la recherche")
+            }
+        }
+        .padding(10)
+        .background(Color(.systemGray6))
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .padding(.horizontal)
+        .padding(.vertical, 8)
     }
     
     private var categoriesSection: some View {
@@ -66,6 +95,22 @@ struct ListingListView: View {
                         Task { await viewModel.load() }
                     }
                     .accessibilityHint("Relance le chargement des annonces")
+                }
+                .padding()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .accessibilityElement(children: .combine)
+                
+            case .empty:
+                VStack(spacing: 8) {
+                    Image(systemName: "magnifyingglass")
+                        .font(.largeTitle)
+                        .foregroundStyle(.secondary)
+                    Text("Aucun résultat")
+                        .font(.headline)
+                    Text("Aucune annonce ne correspond à « \(viewModel.searchQuery) »")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
                 }
                 .padding()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
