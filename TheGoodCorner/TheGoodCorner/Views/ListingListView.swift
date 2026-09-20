@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ListingListView: View {
     @StateObject private var viewModel = ListingsViewModel()
+    @StateObject private var draftViewModel = ListingDraftViewModel()
+    @State private var showDraftForm = false
     
     var body: some View {
         NavigationStack {
@@ -20,6 +22,21 @@ struct ListingListView: View {
                 listingsSection
             }
             .navigationTitle("The Good Corner")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        showDraftForm = true
+                    } label: {
+                        Image(systemName: draftViewModel.hasSavedDraft ? "doc.text" : "plus")
+                    }
+                    .accessibilityLabel(draftViewModel.hasSavedDraft ? "Mon brouillon" : "Nouvelle annonce")
+                    .accessibilityHint(draftViewModel.hasSavedDraft ? "Ouvre le brouillon d'annonce en cours" : "Crée un brouillon pour une nouvelle annonce")
+                }
+            }
+            
+            .sheet(isPresented: $showDraftForm) {
+                ListingDraftFormView(viewModel: draftViewModel, categories: viewModel.categories)
+            }
             .task {
                 if viewModel.state == .idle {
                     await viewModel.load()
