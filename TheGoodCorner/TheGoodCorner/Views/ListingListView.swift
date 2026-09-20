@@ -19,7 +19,9 @@ struct ListingListView: View {
             }
             .navigationTitle("The Good Corner")
             .task {
-                await viewModel.load()
+                if viewModel.state == .idle {
+                    await viewModel.load()
+                }
             }
         }
     }
@@ -76,19 +78,37 @@ struct ListingListView: View {
                         .foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
-                    List(viewModel.filteredListingsByCategory) { listing in
-                        NavigationLink {
-                            ListingDetailView(
-                                listing: listing,
-                                categoryName: viewModel.categoryName(for: listing.categoryId),
-                                baseURL: APIClient.defaultBaseURL
-                            )
-                        } label: {
-                            ListingItem(
-                                listing: listing,
-                                categoryName: viewModel.categoryName(for: listing.categoryId),
-                                baseURL: APIClient.defaultBaseURL
-                            )
+                    List {
+                        ForEach(viewModel.filteredListingsByCategory) { listing in
+                            NavigationLink {
+                                ListingDetailView(
+                                    listing: listing,
+                                    categoryName: viewModel.categoryName(for: listing.categoryId),
+                                    baseURL: APIClient.defaultBaseURL
+                                )
+                            } label: {
+                                ListingItem(
+                                    listing: listing,
+                                    categoryName: viewModel.categoryName(for: listing.categoryId),
+                                    baseURL: APIClient.defaultBaseURL
+                                )
+                            }
+                            .onAppear {
+                                if listing.id == viewModel.filteredListingsByCategory.last?.id && viewModel.selectedCategoryId == nil {
+                                    Task {
+                                        await viewModel.loadNextPage()
+                                    }
+                                }
+                            }
+                        }
+                        
+                        if viewModel.isLoadingMore {
+                            HStack {
+                                Spacer()
+                                ProgressView()
+                                Spacer()
+                            }
+                            .listRowSeparator(.hidden)
                         }
                     }
                     .listStyle(.plain)

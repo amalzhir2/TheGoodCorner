@@ -21,8 +21,12 @@ final class ListingsViewModel: ObservableObject {
     @Published private(set) var listings: [Listing] = []
     @Published private(set) var categories: [Category] = []
     @Published var selectedCategoryId: Int?
+    @Published private(set) var currentPage: Int = 1
+    @Published private(set) var hasMorePages: Bool = true
+    @Published private(set) var isLoadingMore: Bool = false
 
     private let client: APIClientProtocol
+    private let limit = 20
 
     init(client: APIClientProtocol? = nil) {
         self.client = client ?? APIClient()
@@ -37,8 +41,10 @@ final class ListingsViewModel: ObservableObject {
         if state != .loaded {
             state = .loading
         }
+        currentPage = 1
+        hasMorePages = true
         await fetchCategories()
-        await fetchListings()
+        await fetchListings(page: currentPage, replacing: true)
     }
 
     private func fetchCategories() async {
@@ -55,14 +61,27 @@ final class ListingsViewModel: ObservableObject {
         categories.first(where: { $0.id == id })?.name ?? ""
     }
 
-    private func fetchListings() async {
+    private func fetchListings(page: Int, replacing: Bool) async {
         do {
-            let feed = try await client.fetchListings(page: nil, limit: nil, query: nil)
-            listings = feed.items
+            let feed = try await client.fetchListings(page: page, limit: limit, query: nil)
+            if replacing {
+                listings = feed.items
+            } else {
+                listings.append(contentsOf: feed.items)
+            }
+            currentPage = feed.page
+            hasMorePages = feed.hasMore
             state = .loaded
         } catch {
             listings = []
             state = .failed((error as? LocalizedError)?.errorDescription ?? "Something went wrong.")
         }
+    }
+    
+    func loadNextPage() async {
+        guard hasMorePages, !isLoadingMore else { return }
+        isLoadingMore = true
+        defer { isLoadingMore = false }
+        await fetchListings(page: currentPage + 1, replacing: false)
     }
 }
